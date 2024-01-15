@@ -12,7 +12,7 @@ interface IWalletAddress {
 
 
 
-export default function Home() {
+export default function Transfer() {
   const handleSubmit = (
     values: IWalletAddress,
     setSubmitting: (isSubmitting: boolean) => void
@@ -39,7 +39,7 @@ export default function Home() {
             style={{ color: "black" }}
           />
 
-          <button type="submit">Connect</button>
+          <button type="submit">Submit</button>
         </Form>
       </Formik>
     </div>
