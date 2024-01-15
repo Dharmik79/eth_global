@@ -2,7 +2,7 @@
 
 import { WagmiConfig, createConfig } from "wagmi";
 import { ConnectKitProvider, ConnectKitButton, getDefaultConfig } from "connectkit";
-
+import ConnectedWallet from "./components/ConnectedWallet";
 const config = createConfig(
   getDefaultConfig({
     // Required API Keys
@@ -23,7 +23,7 @@ const App = () => {
   return (
     <WagmiConfig config={config}>
       <ConnectKitProvider>
-       
+       <ConnectedWallet />
         <ConnectKitButton />
       </ConnectKitProvider>
     </WagmiConfig>
