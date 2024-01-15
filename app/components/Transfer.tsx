@@ -1,5 +1,3 @@
-
-
 "use client";
 
 import Image from "next/image";
@@ -10,9 +8,11 @@ interface IWalletAddress {
   address: string;
 }
 
+interface Props {
+  address: string;
+}
 
-
-export default function Transfer() {
+export default function Transfer({ address }: Props) {
   const handleSubmit = (
     values: IWalletAddress,
     setSubmitting: (isSubmitting: boolean) => void
@@ -42,8 +42,7 @@ export default function Transfer() {
           <button type="submit">Submit</button>
         </Form>
       </Formik>
+      <div>Connected Wallet: {address}</div>
     </div>
   );
 }
-
-

@@ -23,8 +23,9 @@ const App = () => {
   return (
     <WagmiConfig config={config}>
       <ConnectKitProvider>
+      <ConnectKitButton />
        <ConnectedWallet />
-        <ConnectKitButton />
+    
       </ConnectKitProvider>
     </WagmiConfig>
   );
