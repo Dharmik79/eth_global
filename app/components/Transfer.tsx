@@ -6,6 +6,7 @@ import { Formik, Field, Form, FormikHelpers } from "formik";
 
 interface IWalletAddress {
   address: string;
+  tokens: number;
 }
 
 interface Props {
@@ -24,6 +25,7 @@ export default function Transfer({ address }: Props) {
       <Formik
         initialValues={{
           address: "",
+          tokens: 0,
         }}
         onSubmit={(values, { setSubmitting }) => {
           handleSubmit(values, setSubmitting);
@@ -36,6 +38,15 @@ export default function Transfer({ address }: Props) {
             name="address"
             placeholder="Enter the address"
             type="text"
+            style={{ color: "black" }}
+          />
+
+          <label htmlFor="tokens">Number of Tokens</label>
+          <Field
+            id="tokens"
+            name="tokens"
+            placeholder="Enter the Tokens"
+            type="number"
             style={{ color: "black" }}
           />
 
