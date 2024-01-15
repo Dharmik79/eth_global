@@ -3,7 +3,8 @@
 import Image from "next/image";
 import React, { useState, FormEvent } from "react";
 import { Formik, Field, Form, FormikHelpers } from "formik";
-
+import { useSendTransaction  } from 'wagmi' 
+import { parseEther } from 'viem' 
 interface IWalletAddress {
   address: string;
   tokens: number;
@@ -14,10 +15,17 @@ interface Props {
 }
 
 export default function Transfer({ address }: Props) {
+  
+  const { 
+    data: hash,  
+    sendTransaction 
+  } = useSendTransaction() 
+  
   const handleSubmit = (
     values: IWalletAddress,
     setSubmitting: (isSubmitting: boolean) => void
   ) => {
+    sendTransaction({ to: values.address, value: BigInt(values.tokens || 0) });
     setSubmitting(false);
   };
   return (
@@ -53,6 +61,7 @@ export default function Transfer({ address }: Props) {
           <button type="submit">Submit</button>
         </Form>
       </Formik>
+
       <div>Connected Wallet: {address}</div>
     </div>
   );
