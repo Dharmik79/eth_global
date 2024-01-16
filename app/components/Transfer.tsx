@@ -3,8 +3,8 @@
 import Image from "next/image";
 import React, { useState, FormEvent } from "react";
 import { Formik, Field, Form, FormikHelpers } from "formik";
-import { useSendTransaction  } from 'wagmi' 
-import { parseEther } from 'viem' 
+import { useSendTransaction } from "wagmi";
+import { parseEther } from "viem";
 interface IWalletAddress {
   address: string;
   tokens: number;
@@ -15,17 +15,17 @@ interface Props {
 }
 
 export default function Transfer({ address }: Props) {
-  
-  const { 
-    data: hash,  
-    sendTransaction 
-  } = useSendTransaction() 
-  
+  const { data: hash, sendTransaction } = useSendTransaction();
+
   const handleSubmit = (
     values: IWalletAddress,
-    setSubmitting: (isSubmitting: boolean) => void
+    setSubmitting: (isSubmitting: boolean) => void,
+
   ) => {
-    sendTransaction({ to: values.address, value: parseEther(values.tokens.toString() )});
+    sendTransaction({
+      to: values.address,
+      value: parseEther(values.tokens.toString()),
+    });
     setSubmitting(false);
   };
   return (
@@ -35,31 +35,44 @@ export default function Transfer({ address }: Props) {
           address: "",
           tokens: 0,
         }}
-        onSubmit={(values, { setSubmitting }) => {
+        onSubmit={(values, { setSubmitting,resetForm }) => {
+  
           handleSubmit(values, setSubmitting);
+          resetForm();
         }}
       >
-        <Form>
-          <label htmlFor="address">Wallet Address</label>
-          <Field
-            id="address"
-            name="address"
-            placeholder="Enter the address"
-            type="text"
-            style={{ color: "black" }}
-          />
+        {({
+          isSubmitting,
+          getFieldProps,
+          handleChange,
+          handleBlur,
+          values,
+          resetForm
+        }) => (
+          <Form>
+            <label htmlFor="address">Wallet Address</label>
+            <Field
+              id="address"
+              name="address"
+              placeholder="Enter the address"
+              type="text"
+              values={values.address}
+              style={{ color: "black" }}
+            />
 
-          <label htmlFor="tokens">Number of Tokens</label>
-          <Field
-            id="tokens"
-            name="tokens"
-            placeholder="Enter the Tokens"
-            type="number"
-            style={{ color: "black" }}
-          />
+            <label htmlFor="tokens">Number of Tokens</label>
+            <Field
+              id="tokens"
+              name="tokens"
+              placeholder="Enter the Tokens"
+              type="number"
+              style={{ color: "black" }}
+              values={values.tokens}
+            />
 
-          <button type="submit">Submit</button>
-        </Form>
+            <button type="submit">Submit</button>
+          </Form>
+        )}
       </Formik>
 
       <div>Connected Wallet: {address}</div>
