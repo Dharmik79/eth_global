@@ -25,7 +25,7 @@ export default function Transfer({ address }: Props) {
     values: IWalletAddress,
     setSubmitting: (isSubmitting: boolean) => void
   ) => {
-    sendTransaction({ to: values.address, value: BigInt(values.tokens || 0) });
+    sendTransaction({ to: values.address, value: parseEther(values.tokens.toString() )});
     setSubmitting(false);
   };
   return (
