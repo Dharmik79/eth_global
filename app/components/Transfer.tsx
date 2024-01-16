@@ -1,9 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import React, { useState, FormEvent } from "react";
-import { Formik, Field, Form, FormikHelpers } from "formik";
-import { useSendTransaction } from "wagmi";
+import React, { useState, FormEvent, useEffect, useRef } from "react";
+import { Formik, Field, Form, FormikHelpers, FormikProps } from "formik";
+import { useSendTransaction, useWaitForTransaction } from "wagmi";
 import { parseEther } from "viem";
 interface IWalletAddress {
   address: string;
@@ -19,8 +19,7 @@ export default function Transfer({ address }: Props) {
 
   const handleSubmit = (
     values: IWalletAddress,
-    setSubmitting: (isSubmitting: boolean) => void,
-
+    setSubmitting: (isSubmitting: boolean) => void
   ) => {
     sendTransaction({
       to: values.address,
@@ -28,17 +27,29 @@ export default function Transfer({ address }: Props) {
     });
     setSubmitting(false);
   };
+
+  const formikRef = useRef<FormikProps<any>>(null);
+  const { isLoading: isConfirming, isSuccess: isConfirmed } =
+    useWaitForTransaction({
+      hash: hash?.hash,
+    });
+
+  useEffect(() => {
+    
+
+      formikRef.current?.resetForm();
+    
+  }, [hash]);
   return (
     <div className="container">
       <Formik
+        innerRef={formikRef}
         initialValues={{
           address: "",
           tokens: 0,
         }}
-        onSubmit={(values, { setSubmitting,resetForm }) => {
-  
+        onSubmit={(values, { setSubmitting, resetForm }) => {
           handleSubmit(values, setSubmitting);
-          resetForm();
         }}
       >
         {({
@@ -47,7 +58,7 @@ export default function Transfer({ address }: Props) {
           handleChange,
           handleBlur,
           values,
-          resetForm
+          resetForm,
         }) => (
           <Form>
             <label htmlFor="address">Wallet Address</label>
@@ -74,7 +85,9 @@ export default function Transfer({ address }: Props) {
           </Form>
         )}
       </Formik>
-
+      {hash && <div>Transaction Hash: {hash.hash}</div>}
+      {isConfirming && <div>Waiting for confirmation...</div>} 
+      {isConfirmed && <div>Transaction confirmed.</div>} 
       <div>Connected Wallet: {address}</div>
     </div>
   );
