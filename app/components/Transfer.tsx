@@ -3,7 +3,11 @@
 import Image from "next/image";
 import React, { useState, FormEvent, useEffect, useRef } from "react";
 import { Formik, Field, Form, FormikHelpers, FormikProps } from "formik";
-import { useSendTransaction, useWaitForTransaction } from "wagmi";
+import {
+  useSendTransaction,
+  useWaitForTransaction,
+  type BaseError,
+} from "wagmi";
 import { parseEther } from "viem";
 interface IWalletAddress {
   address: string;
@@ -15,7 +19,7 @@ interface Props {
 }
 
 export default function Transfer({ address }: Props) {
-  const { data: hash, sendTransaction } = useSendTransaction();
+  const { data: hash, error, sendTransaction } = useSendTransaction();
 
   const handleSubmit = (
     values: IWalletAddress,
@@ -35,10 +39,7 @@ export default function Transfer({ address }: Props) {
     });
 
   useEffect(() => {
-    
-
-      formikRef.current?.resetForm();
-    
+    formikRef.current?.resetForm();
   }, [hash]);
   return (
     <div className="container">
@@ -86,8 +87,9 @@ export default function Transfer({ address }: Props) {
         )}
       </Formik>
       {hash && <div>Transaction Hash: {hash.hash}</div>}
-      {isConfirming && <div>Waiting for confirmation...</div>} 
-      {isConfirmed && <div>Transaction confirmed.</div>} 
+      {isConfirming && <div>Waiting for confirmation...</div>}
+      {isConfirmed && <div>Transaction confirmed.</div>}
+      {error && <div>{(error as BaseError).shortMessage || error.message}</div>}
       <div>Connected Wallet: {address}</div>
     </div>
   );
