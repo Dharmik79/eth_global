@@ -1,25 +1,31 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface ConnectionState {
+interface WalletState {
+  address: string | null;
   isConnected: boolean;
+  isDisconnected: boolean;
 }
 
-const initialState: ConnectionState = {
+const initialState: WalletState = {
+  address: null,
   isConnected: false,
+  isDisconnected: true,
 };
 
-export const connectionSlice = createSlice({
-  name: 'connection',
+const walletSlice = createSlice({
+  name: 'wallet',
   initialState,
   reducers: {
-    connect: (state) => {
-      state.isConnected = true;
+    setAddress: (state, action: PayloadAction<string | null>) => {
+      state.address = action.payload;
+      state.isDisconnected = !action.payload;
     },
-    disconnect: (state) => {
-      state.isConnected = false;
+    setConnected: (state, action: PayloadAction<boolean>) => {
+      state.isConnected = action.payload;
+      state.isDisconnected = !action.payload && !state.address;
     },
   },
 });
 
-export const { connect, disconnect } = connectionSlice.actions;
-export default connectionSlice.reducer;
+export const { setAddress, setConnected } = walletSlice.actions;
+export default walletSlice.reducer;
