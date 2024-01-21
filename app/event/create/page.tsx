@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState ,useEffect,} from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Formik, Form, Field, ErrorMessage } from "formik";
@@ -55,33 +55,45 @@ export default function CreateEvent() {
       .integer("Price must be an integer"),
   });
 
-  let { config } = usePrepareContractWrite({
+  
+
+  const [args, setArgs] = useState<(string | number | bigint)[] | undefined>(undefined);
+
+  // Prepare contract write with dynamic arguments
+  const { config } = usePrepareContractWrite({
     ...contractEventTicketFactory,
     functionName: "createEventTicket",
-    args: [],
+    args: args,
   });
 
-  const { data, isLoading, isSuccess, write, error, isError } =
-    useContractWrite(config);
+  const { write } = useContractWrite(config);
 
-  const OnSubmit = (values: FormValues) => {
-    config = usePrepareContractWrite({
-      ...contractEventTicketFactory,
-      functionName: "createEventTicket",
-      args: [
-        "MyEvent",
-        "EVT",
-        values.eventName,
-        moment(values.eventTime).unix(),
-        values.eventURL,
-        values.maxAttendees,
-        ethers.parseEther(values.price.toString()),
-        "0xc4bF5CbDaBE595361438F8c6a187bDc330539c60",
-      ],
-    });
+  const onSubmit = (values:FormValues) => {
+    // Prepare and set arguments based on form values
+    const newArgs = [
+      "MyEvent",
+      "EVT",
+      values.eventName,
+      moment(values.eventTime).unix(),
+      values.eventURL,
+      values.maxAttendees,
+      ethers.parseEther(values.price.toString()),
+      "0xc4bF5CbDaBE595361438F8c6a187bDc330539c60",
+    ];
+ 
 
-    () => write?.();
+    // ...
+
+    setArgs(newArgs);
   };
+
+  useEffect(() => {
+    // Whenever args change and if write function is available, execute the contract write
+    if (write && args) {
+      write();
+    }
+  }, [write, args]);
+  
 
   return (
     <div className="bg-white text-gray-200 p-6">
@@ -90,7 +102,7 @@ export default function CreateEvent() {
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={async (values) => {
-          OnSubmit(values);
+          onSubmit(values);
         }}>
         {({ setFieldValue, isValid, dirty, values }) => (
           <Form>
