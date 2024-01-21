@@ -11,6 +11,10 @@ import { RootState } from "../../lib/store";
 
 const navSecureItems = [
   {
+    path: "/event",
+    name: "My Tickets",
+  },
+  {
     path: "/event/create",
     name: "Create Event",
   },
@@ -81,15 +85,7 @@ export default function NavBar() {
         >
           <span>{"Home"}</span>
         </Link>
-        <Link
-          key={"/event"}
-          className={`px-4 py-2 rounded-md text-sm lg:text-base relative no-underline duration-300 ease-in ${
-            pathname == "/event" ? "text-zinc-100" : "text-zinc-400"
-          }`}
-          href={"/event"}
-        >
-          <span>{"Events"}</span>
-        </Link>
+       
         {reduxIsConnected &&
           navSecureItems.map((item, index) => {
             const isActive = item.path === pathname;

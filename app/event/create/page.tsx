@@ -21,7 +21,7 @@ export default function CreateEvent() {
     eventTime: new Date(),
     maxAttendees: "",
     eventURL: "",
-    eventDescription: "",
+    // eventDescription: "",
     price: 0,
   };
 
@@ -36,7 +36,7 @@ export default function CreateEvent() {
       .integer("Max attendees must be an integer")
       .min(1, "Max attendees must be greater than 0"),
     eventURL: Yup.string().url("Invalid URL").required("Event URL is required"),
-    eventDescription: Yup.string().required("Event description is required"),
+    // eventDescription: Yup.string().required("Event description is required"),
     price: Yup.number()
       .required("Price is required")
       .min(0, "Price must be a positive number or zero")
@@ -129,7 +129,7 @@ export default function CreateEvent() {
               />
             </div>
 
-            <div className="mb-6">
+           {/* <div className="mb-6">
               <label className="block text-lg font-medium mb-2">
                 Event Description
               </label>
@@ -143,10 +143,10 @@ export default function CreateEvent() {
                 component="div"
                 className="text-red-500"
               />
-            </div>
+        </div>*/}
 
             <div className="mb-6">
-              <label className="block text-lg font-medium mb-2">Price</label>
+              <label className="block text-lg font-medium mb-2">Ticket Price (GHO)</label>
               <Field
                 type="number"
                 name="price"

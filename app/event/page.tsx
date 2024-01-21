@@ -1,15 +1,28 @@
 "use client";
-import React from 'react'
-import Card from '../components/Card'
+
+import { useSelector } from "react-redux";
+import { RootState } from "../../lib/store";
+import { ConnectKitButton } from "connectkit";
+import Card from "../components/Card";
 
 
 
-function Events() {
-  return (
-    <div>
-        <Card data/>
-    </div>
-  )
+const MyTicketsPage = () => {
+  return  <>
+  <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white tracking-tight mb-4">
+    My Tickets
+  </h1>
+
+
+  <div className="flex justify-center items-center">
+  <Card data/>
+  </div>
+</>
+
 }
+const App = () => {
 
-export default Events
+  return <><MyTicketsPage/></>;
+};
+
+export default App;
