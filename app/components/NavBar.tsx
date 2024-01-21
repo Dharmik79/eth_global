@@ -1,7 +1,7 @@
 "use client";
 
 import React, { use, useEffect } from "react";
-import { usePathname,useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { ConnectKitButton } from "connectkit";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,7 +10,6 @@ import { setAddress, setConnected } from "@/lib/reducers/connectionSlice";
 import { RootState } from "../../lib/store";
 
 const navSecureItems = [
-
   {
     path: "/event/create",
     name: "Create Event",
@@ -67,7 +66,7 @@ export default function NavBar() {
   useEffect(() => {
     if (!reduxIsConnected) {
       // Redirect to the home page if isReduxConnected becomes false
-      router.push('/');
+      router.push("/");
     }
   }, [reduxIsConnected, router]);
   return (
@@ -82,21 +81,31 @@ export default function NavBar() {
         >
           <span>{"Home"}</span>
         </Link>
-        {reduxIsConnected && navSecureItems.map((item, index) => {
-          const isActive = item.path === pathname;
+        <Link
+          key={"/event"}
+          className={`px-4 py-2 rounded-md text-sm lg:text-base relative no-underline duration-300 ease-in ${
+            pathname == "/event" ? "text-zinc-100" : "text-zinc-400"
+          }`}
+          href={"/event"}
+        >
+          <span>{"Events"}</span>
+        </Link>
+        {reduxIsConnected &&
+          navSecureItems.map((item, index) => {
+            const isActive = item.path === pathname;
 
-          return (
-            <Link
-              key={item.path}
-              className={`px-4 py-2 rounded-md text-sm lg:text-base relative no-underline duration-300 ease-in ${
-                isActive ? "text-zinc-100" : "text-zinc-400"
-              }`}
-              href={item.path}
-            >
-              <span>{item.name}</span>
-            </Link>
-          );
-        })}
+            return (
+              <Link
+                key={item.path}
+                className={`px-4 py-2 rounded-md text-sm lg:text-base relative no-underline duration-300 ease-in ${
+                  isActive ? "text-zinc-100" : "text-zinc-400"
+                }`}
+                href={item.path}
+              >
+                <span>{item.name}</span>
+              </Link>
+            );
+          })}
         <div className="absolute right-0 top-0 bottom-0 flex items-center">
           <ConnectKitButton />
         </div>
