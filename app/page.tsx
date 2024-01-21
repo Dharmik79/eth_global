@@ -73,7 +73,7 @@ const ReadSubContract = ({ address }: { address: `0x${string}` }) => {
 };
 
 const ReadParentContract = ({ number }: { number: number }) => {
-  const { data, isError, isLoading, error } = useContractReads({
+  const { data} = useContractReads({
     contracts: [
       {
         ...contractEventTicketFactory,
@@ -88,7 +88,7 @@ const ReadParentContract = ({ number }: { number: number }) => {
       address: data[0]?.result as `0x${string}`,
       abi: abiJSONContractEventTicket as any,
     };
-    return ReadSubContract({ address: contractEventTicket.address });
+    return  ReadSubContract({ address: contractEventTicket.address });
   }
 };
 function Events() {

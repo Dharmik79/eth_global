@@ -38,7 +38,7 @@ const Card = ({ data, key }: { data: any; key: number }) => {
 
         <p className="text-gray-700">
           Ticket Price:
-          {ethers
+          {data.ticketPrice && ethers
             .formatEther(data.ticketPrice as unknown as ethers.BigNumberish)
             .toString()}
           GHO
