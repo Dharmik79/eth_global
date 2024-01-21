@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState ,useEffect,} from "react";
+import React, { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Formik, Form, Field, ErrorMessage } from "formik";
@@ -55,9 +55,9 @@ export default function CreateEvent() {
       .integer("Price must be an integer"),
   });
 
-  
-
-  const [args, setArgs] = useState<(string | number | bigint)[] | undefined>(undefined);
+  const [args, setArgs] = useState<(string | number | bigint)[] | undefined>(
+    undefined
+  );
 
   // Prepare contract write with dynamic arguments
   const { config } = usePrepareContractWrite({
@@ -66,9 +66,10 @@ export default function CreateEvent() {
     args: args,
   });
 
-  const { write } = useContractWrite(config);
+  const { data, isLoading, isSuccess, write, error, isError } =
+    useContractWrite(config);
 
-  const onSubmit = (values:FormValues) => {
+  const onSubmit = (values: FormValues) => {
     // Prepare and set arguments based on form values
     const newArgs = [
       "MyEvent",
@@ -80,7 +81,6 @@ export default function CreateEvent() {
       ethers.parseEther(values.price.toString()),
       "0xc4bF5CbDaBE595361438F8c6a187bDc330539c60",
     ];
- 
 
     // ...
 
@@ -93,94 +93,105 @@ export default function CreateEvent() {
       write();
     }
   }, [write, args]);
-  
 
   return (
-    <div className="bg-white text-gray-200 p-6">
+    <>
       {/* <Loader isLoading={isLoading || false} /> */}
-      <Formik
-        initialValues={initialValues}
-        validationSchema={validationSchema}
-        onSubmit={async (values) => {
-          onSubmit(values);
-        }}>
-        {({ setFieldValue, isValid, dirty, values }) => (
-          <Form>
-            <h1 className="text-3xl font-semibold mb-6">
-              Create your next Event here!
-            </h1>
+      {isLoading && <div className="text-gray-200 p-6">Creating Event...</div>}
 
-            <div className="mb-4">
-              <label className="block text-lg font-medium mb-2">
-                Event Name
-              </label>
-              <Field
-                name="eventName"
-                type="text"
-                placeholder="Name"
-                className="bg-gray-700 border border-gray-600 text-white rounded-md py-2 px-4 block w-full"
-              />
-              <ErrorMessage
-                name="eventName"
-                component="div"
-                className="text-red-500"
-              />
-            </div>
+      {isSuccess && (
+        <div className="text-gray-200 p-6">
+          Transaction: {JSON.stringify(data)}
+        </div>
+      )}
+      {isError && (
+        <div className="text-gray-200 p-6">Error: {JSON.stringify(error)}</div>
+      )}
+      {!isLoading && !isSuccess && !isError && (
+        <div className="bg-white text-gray-200 p-6">
+          <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={async (values) => {
+              onSubmit(values);
+            }}>
+            {({ setFieldValue, isValid, dirty, values }) => (
+              <Form>
+                <h1 className="text-3xl font-semibold mb-6">
+                  Create your next Event here!
+                </h1>
 
-            <div className="mb-4">
-              <label className="block text-lg font-medium mb-2">
-                Event Time
-              </label>
-              <DatePicker
-                name="eventTime"
-                className="bg-gray-700 border border-gray-600 text-white rounded-md py-2 px-4 block w-full"
-                selected={values.eventTime}
-                onChange={(date: Date) => setFieldValue("eventTime", date)}
-                dateFormat="Pp"
-                minDate={new Date()}
-              />
-              <ErrorMessage
-                name="eventTime"
-                component="div"
-                className="text-red-500"
-              />
-            </div>
+                <div className="mb-4">
+                  <label className="block text-lg font-medium mb-2">
+                    Event Name
+                  </label>
+                  <Field
+                    name="eventName"
+                    type="text"
+                    placeholder="Name"
+                    className="bg-gray-700 border border-gray-600 text-white rounded-md py-2 px-4 block w-full"
+                  />
+                  <ErrorMessage
+                    name="eventName"
+                    component="div"
+                    className="text-red-500"
+                  />
+                </div>
 
-            <div className="mb-4">
-              <label className="block text-lg font-medium mb-2">
-                Max Attendees
-              </label>
-              <Field
-                name="maxAttendees"
-                type="number"
-                placeholder="10"
-                className="bg-gray-700 border border-gray-600 text-white rounded-md py-2 px-4 block w-full"
-              />
-              <ErrorMessage
-                name="maxAttendees"
-                component="div"
-                className="text-red-500"
-              />
-            </div>
+                <div className="mb-4">
+                  <label className="block text-lg font-medium mb-2">
+                    Event Time
+                  </label>
+                  <DatePicker
+                    name="eventTime"
+                    className="bg-gray-700 border border-gray-600 text-white rounded-md py-2 px-4 block w-full"
+                    selected={values.eventTime}
+                    onChange={(date: Date) => setFieldValue("eventTime", date)}
+                    dateFormat="Pp"
+                    minDate={new Date()}
+                  />
+                  <ErrorMessage
+                    name="eventTime"
+                    component="div"
+                    className="text-red-500"
+                  />
+                </div>
 
-            <div className="mb-4">
-              <label className="block text-lg font-medium mb-2">
-                Event URL
-              </label>
-              <Field
-                name="eventURL"
-                type="text"
-                placeholder="URL"
-                className="bg-gray-700 border border-gray-600 text-white rounded-md py-2 px-4 block w-full"
-              />
-              <ErrorMessage
-                name="eventURL"
-                component="div"
-                className="text-red-500"
-              />
-            </div>
+                <div className="mb-4">
+                  <label className="block text-lg font-medium mb-2">
+                    Max Attendees
+                  </label>
+                  <Field
+                    name="maxAttendees"
+                    type="number"
+                    placeholder="10"
+                    className="bg-gray-700 border border-gray-600 text-white rounded-md py-2 px-4 block w-full"
+                  />
+                  <ErrorMessage
+                    name="maxAttendees"
+                    component="div"
+                    className="text-red-500"
+                  />
+                </div>
 
-            {/* <div className="mb-6">
+                <div className="mb-4">
+                  <label className="block text-lg font-medium mb-2">
+                    Event URL
+                  </label>
+                  <Field
+                    name="eventURL"
+                    type="text"
+                    placeholder="URL"
+                    className="bg-gray-700 border border-gray-600 text-white rounded-md py-2 px-4 block w-full"
+                  />
+                  <ErrorMessage
+                    name="eventURL"
+                    component="div"
+                    className="text-red-500"
+                  />
+                </div>
+
+                {/* <div className="mb-6">
               <label className="block text-lg font-medium mb-2">
                 Event Description
               </label>
@@ -194,38 +205,40 @@ export default function CreateEvent() {
                 component="div"
                 className="text-red-500"
               />
-        </div>*/}
+              </div>*/}
 
-            <div className="mb-6">
-              <label className="block text-lg font-medium mb-2">
-                Ticket Price (GHO)
-              </label>
-              <Field
-                type="number"
-                name="price"
-                className="bg-gray-700 border border-gray-600 text-white rounded-md py-2 px-4 block w-full"
-              />
-              <ErrorMessage
-                name="price"
-                component="div"
-                className="text-red-500"
-              />
-            </div>
-            <div className="flex items-center justify-start mt-6">
-              <button
-                type="submit"
-                disabled={!(isValid && dirty)}
-                className={`py-2 px-4 rounded font-bold ${
-                  isValid && dirty
-                    ? "bg-blue-500 hover:bg-blue-700"
-                    : "bg-gray-500 cursor-not-allowed"
-                }`}>
-                Create
-              </button>
-            </div>
-          </Form>
-        )}
-      </Formik>
-    </div>
+                <div className="mb-6">
+                  <label className="block text-lg font-medium mb-2">
+                    Ticket Price (GHO)
+                  </label>
+                  <Field
+                    type="number"
+                    name="price"
+                    className="bg-gray-700 border border-gray-600 text-white rounded-md py-2 px-4 block w-full"
+                  />
+                  <ErrorMessage
+                    name="price"
+                    component="div"
+                    className="text-red-500"
+                  />
+                </div>
+                <div className="flex items-center justify-start mt-6">
+                  <button
+                    type="submit"
+                    disabled={!(isValid && dirty)}
+                    className={`py-2 px-4 rounded font-bold ${
+                      isValid && dirty
+                        ? "bg-blue-500 hover:bg-blue-700"
+                        : "bg-gray-500 cursor-not-allowed"
+                    }`}>
+                    Create
+                  </button>
+                </div>
+              </Form>
+            )}
+          </Formik>
+        </div>
+      )}
+    </>
   );
 }
