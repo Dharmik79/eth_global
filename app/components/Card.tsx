@@ -28,7 +28,7 @@ const Card = ({ data,key }: { data: any,key:number }) => {
   };
 
 
-console.log("data",data)
+
 
   return (
     <div className="max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out">

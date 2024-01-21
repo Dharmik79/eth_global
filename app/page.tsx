@@ -112,7 +112,7 @@ let tickets=[]
   
  console.log(tickets)
   return (
-    <div>
+    <div className='flex'>
         {tickets.map((ticket,i)=>{
           return <Card data={ticket} key={i}/>
         })}
