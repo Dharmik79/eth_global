@@ -2,11 +2,11 @@
 
 ## 📝 Description
 
-This project is a web-based event ticketing platform that allows users to create and attend events seamlessly. Utilizing blockchain technology, it incorporates smart contracts written in Solidity for secure and transparent transactions. Using GHO tokens for purchases, the platform offers a reliable solution for event management and ticket sales. The Sepolia Ethereum testnet is chosen for its reliability, enabling safe testing of smart contracts before deployment on the Ethereum mainnet.
+This project is a web3-based event ticketing platform that allows users to create events and buy tickets seamlessly. Utilizing blockchain technology, it incorporates smart contracts written in Solidity for secure and transparent transactions. Using GHO tokens for purchases, the platform offers a reliable solution for event management and ticket sales. The Sepolia Ethereum testnet is chosen for its reliability, enabling safe testing of smart contracts before deployment on the Ethereum mainnet.
 
 ## 🌟 Features
 
-- **🎉 Event Creation**: Users can create events, specifying details such as title, date, time, and ticket price.
+- **🎉 Event Creation**: Users can create events, specifying details such as title, date, time, and ticket price. Each event has its own NFTs with max minting tokens.
 - **🎫 Ticket Purchasing**: Attendees can purchase tickets using GHO tokens.
 - **🔗 Wallet Integration**: Incorporates Connect Kit for secure cryptocurrency wallet connections.
 - **💻 Responsive Design**: Ensures a smooth user experience across various devices.
@@ -19,8 +19,6 @@ This project is a web-based event ticketing platform that allows users to create
 - **Overview**: The Home page serves as the landing page of the platform, where users can discover and browse through various events listed.
 - **Features**:
   - **Event List**: Displays all the available events with essential details like name, date, and location.
-  - **Search and Filter**: Users can search for events or apply filters based on categories such as event type, location, and date.
-  - **Navigation**: Easy access to other sections of the platform like My Events and Create Event.
 
 ### My Events Page
 
@@ -34,7 +32,6 @@ This project is a web-based event ticketing platform that allows users to create
 - **Features**:
   - **Event Form**: A form to enter all new event details, including title, date, time, ticket price, etc.
   - **Smart Contract Integration**: Deploys a smart contract for each new event to handle ticketing using NFT.
-  - **Preview and Publish**: Users can preview their event listing before publishing it to the Home page.
 
 ## 🔒 Security Features
 
@@ -50,7 +47,6 @@ In our platform, the wallet connection status plays a crucial role in user acces
 
 This security approach ensures that our platform remains user-friendly while upholding high standards of transaction security and user verification.
 
-
 ## 💻 Technologies Used
 
 - React.js
@@ -59,6 +55,7 @@ This security approach ensures that our platform remains user-friendly while uph
 - wagmi (for Ethereum blockchain interaction)
 - ethers.js (Ethereum wallet implementation)
 - Solidity (for smart contract development)
+- ERC721 (NFTs as Event Tickets)
 - Connect Kit (for wallet connections)
 - Sepolia Ethereum testnet
 
@@ -70,15 +67,11 @@ This security approach ensures that our platform remains user-friendly while uph
 
 - **Advanced Analytics Dashboard**: Develop an analytics dashboard for event organizers to track sales, audience demographics, and engagement metrics in real-time.
 
-- **NFT Ticketing**: Integrate Non-Fungible Tokens (NFTs) for unique, collectible, and resellable event tickets, providing an additional layer of uniqueness and value for ticket holders.
-
 - **Integration with Additional Blockchains**: Expand our platform’s compatibility with other blockchain networks to offer more flexibility in terms of ticketing and payments.
 
 - **Sustainability Features**: Implement features to promote and support sustainable and eco-friendly events.
 
 - **Community Features**: Develop a community forum and feedback system for users to engage with each other and provide direct input into the platform's development.
-
-- **Smart Contract Upgrades**: Continuously improve the smart contract architecture for enhanced performance, security, and scalability.
 
 ### Continuous Improvement:
 
@@ -86,29 +79,37 @@ This security approach ensures that our platform remains user-friendly while uph
 
 ## 🚀 Getting Started
 
-### Prerequisites
+### Frontend
+
+#### Prerequisites
 
 - Node.js
 - npm
 - Git
-- A wallet with testnet GHO tokens
+- A wallet with testnet GHO tokens on Sepolia
 
-### Installation
+#### Installation
 
 1. Clone the repo
    ```sh
    git clone https://github.com/Dharmik79/eth_global.git
+   ```
 2. Install NPM packages
    ```sh
     npm install --force
+   ```
 3. Start the development server
    ```sh
    npm run dev
+   ```
 
+### Smart Contracts
+
+For smart contracts, please refer to the [contract repository](https://github.com/bhargavkakadiya/eth-global-lfgho-contracts/).
 
 ## 👥 Contributors
 
 Thank you to all our contributors:
 
-- **[Bhargavkumar Kakadiya](https://www.linkedin.com/in/bhargavkakadiya/)**
+- **[BK](https://www.linkedin.com/in/bhargavkakadiya/)**
 - **[Dharmik Dholariya](https://www.linkedin.com/in/dharmikdholariya/)**
