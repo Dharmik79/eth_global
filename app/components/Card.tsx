@@ -49,10 +49,11 @@ const Card = ({
         </h3>
         <p className="text-gray-600 mb-4">
           <span className="font-semibold">Ticket Price:</span>
-          {data.ticketPrice &&
-            ethers
-              .formatEther(data.ticketPrice as unknown as ethers.BigNumberish)
-              .toString()}{" "}
+          {data.ticketPrice && data.ticketPrice === 0
+            ? "Free"
+            : ethers
+                .formatEther(data.ticketPrice as unknown as ethers.BigNumberish)
+                .toString()}{" "}
           GHO
           <br />
           <span className="font-semibold">Event Date:</span>
