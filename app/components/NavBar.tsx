@@ -13,6 +13,10 @@ const navItems = [
     path: "/",
     name: "Home",
   },
+  {
+    path:"/event/create",
+    name:"Create Event"
+  }
 ];
 
 
