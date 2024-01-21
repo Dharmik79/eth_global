@@ -69,6 +69,7 @@ const ReadSubContract = ({ address }: { address: `0x${string}` }) => {
         totalTickets: data[4].result,
         paymentTokenAddress: data[5].result,
         ticketSold: data[6].result,
+        contractAddress: address,
       };
       return event;
     }

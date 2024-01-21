@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../lib/store";
 import { ConnectKitButton, ConnectKitProvider } from "connectkit";
 import { useEffect, useRef, useState } from "react";
-
+import React from "react";
 import abiJSONContractEventTicket from "../../public/abi/contractEventTicket.json";
 import abiGHOToken from "../../public/abi/GHOToken.json";
 
@@ -28,93 +28,16 @@ const Card = ({
     (state: RootState) => state.connection.isConnected
   );
 
-  const [args, setArgs] = useState<(string | number | bigint)[] | undefined>(
-    undefined
-  );
-
   const [buy, setBuy] = useState(false);
-
-  // Prepare contract write with dynamic arguments
-  const { config: configApprove } = usePrepareContractWrite({
-    address: "0xc4bF5CbDaBE595361438F8c6a187bDc330539c60",
-    abi: abiGHOToken,
-    functionName: "approve",
-    args: args,
-  });
-  const { config: configBuy } = usePrepareContractWrite({
-    address: data?.contractAddress,
-    abi: abiJSONContractEventTicket,
-    functionName: "buyTicket",
-    args: [],
-  });
-
-  const {
-    data: contractWriteData,
-    isLoading,
-    isSuccess,
-    write,
-    error,
-    isError,
-  } = useContractWrite(configApprove);
-
-  const {
-    data: contractWriteDataBuy,
-    isLoading: isLoadingBuy,
-    isSuccess: isSuccessBuy,
-    write: writeBuy,
-    error: errorBuy,
-    isError: isErrorBuy,
-  } = useContractWrite(configBuy);
 
   const HandleBuyClick = () => {
     if (!isReduxConnected) {
       alert("Please Connect Wallet");
     } else {
+      setBuy(true);
       // approve the contract to spend the amount of tokens
-      const newArgs = [
-        data?.contractAddress,
-        ethers.parseEther(data?.ticketPrice.toString() as string),
-      ];
-      setArgs(newArgs);
-      // call another write once the approve is done
-      // check if approved
-      const dataTxApprove = WaitForTransactionData(contractWriteData?.hash);
-      if (dataTxApprove) {
-        setBuy(true);
-      }
-
-      // call buy ticket
-      const dataTxBuy = WaitForTransactionData(contractWriteDataBuy?.hash);
-      if (dataTxBuy) {
-        alert("Ticket Bought");
-      }
-    }
-
-    function WaitForTx(): { data: any } {
-      return useWaitForTransaction({
-        hash: contractWriteData?.hash,
-      });
-    }
-    function WaitForTxBuy(): { data: any } {
-      return useWaitForTransaction({
-        hash: contractWriteDataBuy?.hash,
-      });
     }
   };
-
-  useEffect(() => {
-    // Whenever args change and if write function is available, execute the contract write
-    if (write && args) {
-      write();
-    }
-  }, [write, args]);
-
-  useEffect(() => {
-    // Whenever args change and if write function is available, execute the contract write
-    if (writeBuy && buy) {
-      writeBuy();
-    }
-  }, [writeBuy, buy]);
 
   const ticketsLeft = Number(data?.totalTickets) - Number(data?.ticketSold);
 
@@ -168,20 +91,106 @@ const Card = ({
           </button>
         </div>
       )}
+      {buy && <NewFn _data={data} />}
     </div>
   );
 };
 
 export default Card;
 
-function WaitForTransactionData(_hash: `0x${string}` | undefined) {
-  const {
-    data: dataWaitForTransaction,
-    isError: isErrorWaitForTransaction,
-    isLoading: isLoadingWaitForTransaction,
-  } = useWaitForTransaction({
-    hash: _hash,
+function NewFn({ _data }: { _data: any }) {
+  // approve the contract to spend the amount of tokens
+  let newArgs = [
+    _data?.contractAddress?.toString(),
+    Number(_data?.ticketPrice || 0),
+  ];
+  console.log(newArgs);
+  // Prepare contract write with dynamic arguments
+  const { config: configApprove } = usePrepareContractWrite({
+    address: "0xc4bF5CbDaBE595361438F8c6a187bDc330539c60",
+    abi: abiGHOToken,
+    functionName: "approve",
+    args: newArgs,
   });
 
-  return dataWaitForTransaction;
+  const {
+    data: contractWriteData,
+    isLoading,
+    isSuccess,
+    write,
+    error,
+    isError,
+  } = useContractWrite(configApprove);
+
+  // if ticket price is 0 then mint the ticket
+  if (Number(_data?.ticketPrice || 0) == 0) {
+    return <MintTicket _data={_data}></MintTicket>;
+  }
+
+  if (contractWriteData) {
+    return (
+      <>
+        <MintTicket _data={_data}></MintTicket>
+      </>
+    );
+  }
+
+  return (
+    <div className="px-5 py-3 bg-gray-100">
+      <button
+        className={`w-full px-4 py-2 text-sm font-medium leading-5 text-center text-white transition-colors duration-300 ${
+          isLoading ? "bg-blue-600" : "bg-blue-600 hover:bg-blue-700"
+        } focus:outline-none`}
+        onClick={() => {
+          write();
+        }}>
+        {isLoading ? "Loading" : "Approve"}
+      </button>
+    </div>
+  );
+}
+
+function MintTicket({ _data }: { _data: any }) {
+  const { config: configBuy } = usePrepareContractWrite({
+    address: _data?.contractAddress,
+    abi: abiJSONContractEventTicket,
+    functionName: "buyTicket",
+    args: [],
+  });
+
+  const {
+    data: contractWriteDataBuy,
+    isLoading: isLoadingBuy,
+    isSuccess: isSuccessBuy,
+    write: writeBuy,
+    error: errorBuy,
+    isError: isErrorBuy,
+  } = useContractWrite(configBuy);
+
+  if (contractWriteDataBuy) {
+    return (
+      <>
+        <div className="px-5 py-3 bg-gray-100">
+          <button
+            className={`w-full px-4 py-2 text-sm font-medium leading-5 text-center text-white transition-colors duration-300 bg-green-400 focus:outline-none`}>
+            Minted
+          </button>
+        </div>
+      </>
+    );
+  }
+
+  return (
+    <div className="px-5 py-3 bg-gray-100">
+      <button
+        className={`w-full px-4 py-2 text-sm font-medium leading-5 text-center text-white transition-colors duration-300 ${
+          isLoadingBuy ? "bg-blue-600" : "bg-blue-600 hover:bg-blue-700"
+        } focus:outline-none`}
+        onClick={() => {
+          writeBuy();
+        }}>
+        {isLoadingBuy ? "Loading" : "Mint Ticket"}
+      </button>
+    </div>
+  );
 }
