@@ -5,17 +5,18 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-
+import Loader from "../../components/Loader";
 interface FormValues {
   eventName: string;
   eventTime: Date;
   maxAttendees: number | string;
   eventURL: string;
-  eventDescription: string;
+  // eventDescription: string;
   price: number;
 }
 
 export default function CreateEvent() {
+  const [isLoading, setIsLoading] = useState(false);
   const initialValues: FormValues = {
     eventName: "",
     eventTime: new Date(),
@@ -45,12 +46,22 @@ export default function CreateEvent() {
 
   return (
     <div className="bg-white text-gray-200 p-6">
+      <Loader isLoading={isLoading} />
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
-        onSubmit={(values) => {
+        onSubmit={async(values) => {
           console.log(values);
-          // Handle form submission here
+          setIsLoading(true); // Start loading
+          try {
+            // Simulate API call
+            console.log(values);
+            await new Promise((resolve) => setTimeout(resolve, 2000)); // Mock API call
+          } catch (error) {
+            console.error("Submission error:", error);
+          } finally {
+            setIsLoading(false); // Stop loading
+          }
         }}
       >
         {({ setFieldValue, isValid, dirty, values }) => (
