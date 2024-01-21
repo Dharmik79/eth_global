@@ -1,6 +1,6 @@
 "use client";
-import React from 'react'
-import Card from './components/Card';
+import React from "react";
+import Card from "./components/Card";
 import { useContractRead, useContractReads } from "wagmi";
 import abiJSONContractEventTicket from "../public/abi/contractEventTicket.json";
 import abiJSONContractEventTicketFactory from "../public/abi/contractEventTicketFactory.json";
@@ -11,7 +11,7 @@ const contractEventTicketFactory = {
   abi: abiJSONContractEventTicketFactory as any,
 };
 
-const ReadSubContract=({address}:{address:`0x${string}`})=>{
+const ReadSubContract = ({ address }: { address: `0x${string}` }) => {
   const { data, isError, isLoading, error } = useContractReads({
     contracts: [
       {
@@ -58,22 +58,21 @@ const ReadSubContract=({address}:{address:`0x${string}`})=>{
       },
     ],
   });
-  if(data?.length > 0 && data[0].status=="success"){
-   
-    const event={
-      eventTime:data[0].result,
-      eventTitle:data[1].result,
-      eventURL:data[2].result,
-      ticketPrice:data[3].result,
-      totalTickets:data[4].result,
-      paymentTokenAddress:data[5].result,
-      ticketSold:data[6].result,
-    }
+  if (data?.length > 0 && data[0].status == "success") {
+    const event = {
+      eventTime: data[0].result,
+      eventTitle: data[1].result,
+      eventURL: data[2].result,
+      ticketPrice: data[3].result,
+      totalTickets: data[4].result,
+      paymentTokenAddress: data[5].result,
+      ticketSold: data[6].result,
+    };
     return event;
   }
-}
+};
 
-const ReadParentContract=({number}:{number:number})=>{
+const ReadParentContract = ({ number }: { number: number }) => {
   const { data, isError, isLoading, error } = useContractReads({
     contracts: [
       {
@@ -84,19 +83,16 @@ const ReadParentContract=({number}:{number:number})=>{
     ],
   });
 
-
-
-  if(data?.length > 0 && data[0].status=="success"){
+  if (data?.length > 0 && data[0].status == "success") {
     const contractEventTicket = {
       address: data[0]?.result as `0x${string}`,
       abi: abiJSONContractEventTicket as any,
     };
-   return ReadSubContract({address:contractEventTicket.address})
-
+    return ReadSubContract({ address: contractEventTicket.address });
   }
-}
+};
 function Events() {
-let tickets=[]
+  let tickets = [];
 
   const { data, isError, isLoading, error } = useContractReads({
     contracts: [
@@ -107,24 +103,22 @@ let tickets=[]
       },
     ],
   });
-  if(data?.length > 0 && data[0].result && data[0].status=="success"){
-    for(let i=0;i<data[0].result;i++){
- let result=ReadParentContract({number:i})
-  if(result){
-    tickets.push(result)
-  }
+  if (data?.length > 0 && data[0].result && data[0].status == "success") {
+    for (let i = 0; i < data[0].result; i++) {
+      let result = ReadParentContract({ number: i });
+      if (result) {
+        tickets.push(result);
+      }
     }
-
   }
-  
 
   return (
-    <div className='flex'>
-        {tickets.map((ticket,i)=>{
-          return <Card data={ticket} key={i}/>
-        })}
+    <div className="flex">
+      {tickets.map((ticket, i) => {
+        return <Card data={ticket} key={i} />;
+      })}
     </div>
-  )
+  );
 }
 
-export default Events
+export default Events;

@@ -15,8 +15,6 @@ const contractEventTicketFactory = {
   abi: abiJSONContractEventTicketFactory as any,
 };
 
-
-
 const MyTicketsPage = () => {
   const { data, isError, isLoading, error } = useContractReads({
     contracts: [
@@ -32,8 +30,6 @@ const MyTicketsPage = () => {
       },
     ],
   });
-
-
 
   return (
     <>
