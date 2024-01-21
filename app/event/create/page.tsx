@@ -12,6 +12,7 @@ interface FormValues {
   maxAttendees: number | string;
   eventURL: string;
   eventDescription: string;
+  price: number;
 }
 
 export default function CreateEvent() {
@@ -21,6 +22,7 @@ export default function CreateEvent() {
     maxAttendees: "",
     eventURL: "",
     eventDescription: "",
+    price: 0,
   };
 
   const validationSchema = Yup.object().shape({
@@ -35,6 +37,10 @@ export default function CreateEvent() {
       .min(1, "Max attendees must be greater than 0"),
     eventURL: Yup.string().url("Invalid URL").required("Event URL is required"),
     eventDescription: Yup.string().required("Event description is required"),
+    price: Yup.number()
+      .required("Price is required")
+      .min(0, "Price must be a positive number or zero")
+      .integer("Price must be an integer"),
   });
 
   return (
@@ -78,9 +84,9 @@ export default function CreateEvent() {
                 name="eventTime"
                 className="bg-gray-700 border border-gray-600 text-white rounded-md py-2 px-4 block w-full"
                 selected={values.eventTime}
-                onChange={(date:Date) => setFieldValue("eventTime", date)}
+                onChange={(date: Date) => setFieldValue("eventTime", date)}
                 dateFormat="Pp"
-                minDate={new Date()} 
+                minDate={new Date()}
               />
               <ErrorMessage
                 name="eventTime"
@@ -134,6 +140,20 @@ export default function CreateEvent() {
               />
               <ErrorMessage
                 name="eventDescription"
+                component="div"
+                className="text-red-500"
+              />
+            </div>
+
+            <div className="mb-6">
+              <label className="block text-lg font-medium mb-2">Price</label>
+              <Field
+                type="number"
+                name="price"
+                className="bg-gray-700 border border-gray-600 text-white rounded-md py-2 px-4 block w-full"
+              />
+              <ErrorMessage
+                name="price"
                 component="div"
                 className="text-red-500"
               />
