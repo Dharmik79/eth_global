@@ -6,7 +6,9 @@ import "./globals.css";
 import Wallet from "./components/Wallet";
 import NavBar from "./components/NavBar";
 import StoreProvider from "@/lib/StoreProvider";
-const inter = Inter({ subsets: ["latin"] });
+
+import Layout from "./components/Layout";
+
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -23,10 +25,10 @@ export default function RootLayout({
       <body className="bg-gradient-to-tr overflow-x-hidden min-w-screen from-zinc-950 via-stone-900 to-neutral-950 flex min-h-screen flex-col items-center justify-between">
         <main className="p-4 py-10 gap-6 w-full lg:w-[70%]">
           <StoreProvider>
-          <Wallet>
-            <NavBar />
-            {children}
-          </Wallet>
+            <Wallet>
+              <NavBar />
+              <Layout>{children}</Layout>
+            </Wallet>
           </StoreProvider>
         </main>
       </body>
