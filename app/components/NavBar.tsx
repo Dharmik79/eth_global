@@ -11,7 +11,7 @@ import { RootState } from "../../lib/store";
 
 const navSecureItems = [
   {
-    path: "/event",
+    path: "/myevent",
     name: "My Tickets",
   },
   {
