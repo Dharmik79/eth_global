@@ -8,7 +8,7 @@ import {
 } from "connectkit";
 import ConnectedWallet from "./ConnectedWallet";
 import { mainnet, polygon, optimism, arbitrum, sepolia } from "wagmi/chains";
-const chains = [mainnet, polygon, optimism, arbitrum, sepolia];
+const chains = [ sepolia];
 
 const config = createConfig(
   getDefaultConfig({
