@@ -1,0 +1,101 @@
+[
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "eventTicketAddress",
+                "type": "address"
+            }
+        ],
+        "name": "EventTicketCreated",
+        "type": "event"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "string",
+                "name": "name",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "symbol",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "_eventTitle",
+                "type": "string"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_eventTime",
+                "type": "uint256"
+            },
+            {
+                "internalType": "string",
+                "name": "_eventURL",
+                "type": "string"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_totalTickets",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_ticketPrice",
+                "type": "uint256"
+            },
+            {
+                "internalType": "contract ERC20",
+                "name": "_paymentTokenAddress",
+                "type": "address"
+            }
+        ],
+        "name": "createEventTicket",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "eventTickets",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getEventTicketCount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    }
+]

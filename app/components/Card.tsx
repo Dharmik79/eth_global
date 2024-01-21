@@ -3,6 +3,16 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../lib/store";
 import { ConnectKitButton, ConnectKitProvider } from "connectkit";
 import { useEffect, useRef, useState } from "react";
+
+import abiJSONContractEventTicket from "../../public/abi/contractEventTicket.json";
+import abiJSONContractEventTicketFactory from "../../public/abi/contractEventTicketFactory.json";
+
+const contractEventTicketFactory = {
+  address: process.env
+    .NEXT_PUBLIC_EVENT_TICKET_CONTRACT_ADDRESS as `0x${string}`,
+  abi: abiJSONContractEventTicketFactory as any,
+};
+
 // On Click Submit check for the status of the wallet and if not connected then connect the wallet
 const Card = ({ data }: { data: any }) => {
   const isReduxConnected = useSelector(
@@ -43,8 +53,7 @@ const Card = ({ data }: { data: any }) => {
           className="w-full px-4 py-2 text-sm font-medium leading-5 text-center text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none"
           onClick={() => {
             handleBuyClick();
-          }}
-        >
+          }}>
           Buy Ticket
         </button>
       </div>
