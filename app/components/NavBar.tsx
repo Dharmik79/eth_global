@@ -1,13 +1,14 @@
 "use client";
 
-import React, { useEffect } from "react";
-import { usePathname } from "next/navigation";
+import React, { use, useEffect } from "react";
+import { usePathname,useRouter } from "next/navigation";
 import Link from "next/link";
 import { ConnectKitButton } from "connectkit";
 import { useDispatch, useSelector } from "react-redux";
 import { useAccount } from "wagmi";
 import { setAddress, setConnected } from "@/lib/reducers/connectionSlice";
 import { RootState } from "../../lib/store";
+
 const navSecureItems = [
 
   {
@@ -60,6 +61,15 @@ export default function NavBar() {
     dispatch(setAddress(address || null));
     dispatch(setConnected(isConnected));
   }, [address, isConnected, dispatch]);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!reduxIsConnected) {
+      // Redirect to the home page if isReduxConnected becomes false
+      router.push('/');
+    }
+  }, [reduxIsConnected, router]);
   return (
     <div className="border border-stone-800/90 p-[0.4rem] rounded-lg mb-12 sticky top-4 z-[100] bg-stone-900/80 backdrop-blur-md">
       <nav className="flex gap-20 relative justify-start w-full z-[100]  rounded-lg">
