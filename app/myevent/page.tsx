@@ -128,8 +128,10 @@ const MyTicketsPage = () => {
   });
 
   if (data?.length > 0 && data[0].result && data[0].status == "success") {
-    for (let i = 0; i < data[0].result; i++) {
+    let j = 0;
+    for (let i = data[0].result; i >= 0 && j < 5; i--) {
       let result = ReadParentContract({ number: i, address: reduxAddress });
+      j++;
       if (result) {
         tickets.push(result);
       }
