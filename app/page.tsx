@@ -122,7 +122,7 @@ function Events() {
   return (
     <div className="flex flex-wrap justify-center gap-5">
       {tickets.map((ticket, i) => {
-        return <Card data={ticket} key={i} />;
+        return <Card data={ticket} key={i} type={true}/>;
       })}
     </div>
   );

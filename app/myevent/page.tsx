@@ -55,24 +55,7 @@ const ReadSubContract = ({
         functionName: "ticketPrice",
         args: [],
       },
-      {
-        address: address,
-        abi: abiJSONContractEventTicket as any,
-        functionName: "totalTickets",
-        args: [],
-      },
-      {
-        address: address,
-        abi: abiJSONContractEventTicket as any,
-        functionName: "paymentTokenAddress",
-        args: [],
-      },
-      {
-        address: address,
-        abi: abiJSONContractEventTicket as any,
-        functionName: "_nextTokenId",
-        args: [],
-      },
+      
     ],
   });
 
@@ -82,9 +65,7 @@ const ReadSubContract = ({
       eventTitle: data[2].result,
       eventURL: data[3].result,
       ticketPrice: data[4].result,
-      totalTickets: data[5].result,
-      paymentTokenAddress: data[6].result,
-      ticketSold: data[7].result,
+   
     };
     return event;
   }}
@@ -164,7 +145,7 @@ const MyTicketsPage = () => {
       <div className="flex flex-wrap justify-center gap-5">
         {tickets.length > 0 ? (
           tickets.map((ticket, index) => {
-            return <Card data={ticket} key={index} />;
+            return <Card data={ticket} key={index} type={false}/>;
           })
         ) : (
           <div className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white tracking-tight mb-4">
