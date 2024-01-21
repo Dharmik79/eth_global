@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 
 import abiJSONContractEventTicket from "../../public/abi/contractEventTicket.json";
 import abiJSONContractEventTicketFactory from "../../public/abi/contractEventTicketFactory.json";
-
+import moment from "moment";
 const contractEventTicketFactory = {
   address: process.env
     .NEXT_PUBLIC_EVENT_TICKET_CONTRACT_ADDRESS as `0x${string}`,
@@ -14,7 +14,7 @@ const contractEventTicketFactory = {
 };
 
 // On Click Submit check for the status of the wallet and if not connected then connect the wallet
-const Card = ({ data }: { data: any }) => {
+const Card = ({ data,key }: { data: any,key:number }) => {
   const isReduxConnected = useSelector(
     (state: RootState) => state.connection.isConnected
   );
@@ -27,26 +27,31 @@ const Card = ({ data }: { data: any }) => {
     }
   };
 
+
+console.log("data",data)
+
   return (
     <div className="max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out">
       <div className="p-5">
         <h3 className="mb-2 text-xl font-bold text-gray-800">
-          Ticket Name: {data?.[0]?.result?.toString()}
+      {data?.eventTitle}
         </h3>
-        {data?.[1]?.result && (
-          <p className="mb-4 text-base text-gray-600">
-            Ticket Price:{" "}
-            {ethers
-              .formatEther(data[1].result as unknown as ethers.BigNumberish)
-              .toString()}{" "}
-            ETH
-          </p>
-        )}
+       
         <p className="text-gray-700">
-          Event Venue: Vancouver, BC
+        Ticket Price:
+            {ethers
+              .formatEther(data.ticketPrice as unknown as ethers.BigNumberish)
+              .toString()}
+            GHO
           <br />
-          Event Date: 31 Oct 2023, 11 pm
+          Event Date: {moment(Number(data?.eventTime)*1000).format("MMMM Do, YYYY")}
+          <br/>
+          Event Time: {moment(Number(data?.eventTime)*1000).format("hh:mm a")}
+
+          <br/>
+          Event Link: <a href={data?.eventURL} target="_blank" className="underline">Link</a>
         </p>
+        
       </div>
       <div className="px-5 py-3 bg-gray-100">
         <button

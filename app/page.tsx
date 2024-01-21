@@ -11,7 +11,85 @@ const contractEventTicketFactory = {
   abi: abiJSONContractEventTicketFactory as any,
 };
 
+const ReadSubContract=({address}:{address:`0x${string}`})=>{
+  const { data, isError, isLoading, error } = useContractReads({
+    contracts: [
+      {
+        address: address,
+        abi: abiJSONContractEventTicket as any,
+        functionName: "eventTime",
+        args: [],
+      },
+      {
+        address: address,
+        abi: abiJSONContractEventTicket as any,
+        functionName: "eventTitle",
+        args: [],
+      },
+      {
+        address: address,
+        abi: abiJSONContractEventTicket as any,
+        functionName: "eventURL",
+        args: [],
+      },
+      {
+        address: address,
+        abi: abiJSONContractEventTicket as any,
+        functionName: "ticketPrice",
+        args: [],
+      },
+      {
+        address: address,
+        abi: abiJSONContractEventTicket as any,
+        functionName: "totalTickets",
+        args: [],
+      },
+      {
+        address: address,
+        abi: abiJSONContractEventTicket as any,
+        functionName: "paymentTokenAddress",
+        args: [],
+      },
+    ],
+  });
+  if(data?.length > 0 && data[0].status=="success"){
+   
+    const event={
+      eventTime:data[0].result,
+      eventTitle:data[1].result,
+      eventURL:data[2].result,
+      ticketPrice:data[3].result,
+      totalTickets:data[4].result,
+      paymentTokenAddress:data[5].result,
+    }
+    return event;
+  }
+}
+
+const ReadParentContract=({number}:{number:number})=>{
+  const { data, isError, isLoading, error } = useContractReads({
+    contracts: [
+      {
+        ...contractEventTicketFactory,
+        functionName: "eventTickets",
+        args: [number],
+      },
+    ],
+  });
+
+
+
+  if(data?.length > 0 && data[0].status=="success"){
+    const contractEventTicket = {
+      address: data[0]?.result as `0x${string}`,
+      abi: abiJSONContractEventTicket as any,
+    };
+   return ReadSubContract({address:contractEventTicket.address})
+
+  }
+}
 function Events() {
+let tickets=[]
 
   const { data, isError, isLoading, error } = useContractReads({
     contracts: [
@@ -20,18 +98,24 @@ function Events() {
         functionName: "getEventTicketCount",
         args: [],
       },
-      {
-        ...contractEventTicketFactory,
-        functionName: "eventTickets",
-        args: [0],
-      },
     ],
   });
+  if(data?.length > 0 && data[0].result && data[0].status=="success"){
+    for(let i=0;i<data[0].result;i++){
+ let result=ReadParentContract({number:i})
+  if(result){
+    tickets.push(result)
+  }
+    }
 
-  console.log("data FROM EVENTS ", data);  
+  }
+  
+ console.log(tickets)
   return (
     <div>
-        <Card data/>
+        {tickets.map((ticket,i)=>{
+          return <Card data={ticket} key={i}/>
+        })}
     </div>
   )
 }
