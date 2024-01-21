@@ -22,7 +22,8 @@ const ReadSubContract = ({
   address: `0x${string}`;
   userAddress: `0x${string}`;
 }) => {
-  const { data } = useContractReads({
+  try
+{  const { data } = useContractReads({
     contracts: [
       {
         address: address,
@@ -86,6 +87,10 @@ const ReadSubContract = ({
       ticketSold: data[7].result,
     };
     return event;
+  }}
+  catch(e)
+  {
+    console.log(e);
   }
 };
 
@@ -96,6 +101,9 @@ const ReadParentContract = ({
   number: number;
   address: `0x${string}`;
 }) => {
+  try{
+
+  
   const { data, isError, isLoading, error } = useContractReads({
     contracts: [
       {
@@ -116,6 +124,10 @@ const ReadParentContract = ({
       userAddress: address,
     });
   }
+} catch(e)
+{
+  console.log(e);
+}
 };
 const MyTicketsPage = () => {
   let tickets = [];
@@ -149,7 +161,7 @@ const MyTicketsPage = () => {
         My Tickets
       </h1>
 
-      <div className="flex justify-center items-center">
+      <div className="flex flex-wrap justify-center gap-5">
         {tickets.length > 0 ? (
           tickets.map((ticket, index) => {
             return <Card data={ticket} key={index} />;
