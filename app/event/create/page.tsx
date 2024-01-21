@@ -15,8 +15,19 @@ interface FormValues {
   price: number;
 }
 
+import abiJSONContractEventTicket from "../../../public/abi/contractEventTicket.json";
+import abiJSONContractEventTicketFactory from "../../../public/abi/contractEventTicketFactory.json";
+import { useContractWrite, usePrepareContractWrite } from "wagmi";
+import moment from "moment";
+import { ethers } from "ethers";
+
+const contractEventTicketFactory = {
+  address: process.env
+    .NEXT_PUBLIC_EVENT_TICKET_CONTRACT_ADDRESS as `0x${string}`,
+  abi: abiJSONContractEventTicketFactory as any,
+};
+
 export default function CreateEvent() {
-  const [isLoading, setIsLoading] = useState(false);
   const initialValues: FormValues = {
     eventName: "",
     eventTime: new Date(),
@@ -44,26 +55,43 @@ export default function CreateEvent() {
       .integer("Price must be an integer"),
   });
 
+  let { config } = usePrepareContractWrite({
+    ...contractEventTicketFactory,
+    functionName: "createEventTicket",
+    args: [],
+  });
+
+  const { data, isLoading, isSuccess, write, error, isError } =
+    useContractWrite(config);
+
+  const OnSubmit = (values: FormValues) => {
+    config = usePrepareContractWrite({
+      ...contractEventTicketFactory,
+      functionName: "createEventTicket",
+      args: [
+        "MyEvent",
+        "EVT",
+        values.eventName,
+        moment(values.eventTime).unix(),
+        values.eventURL,
+        values.maxAttendees,
+        ethers.parseEther(values.price.toString()),
+        "0xc4bF5CbDaBE595361438F8c6a187bDc330539c60",
+      ],
+    });
+
+    () => write?.();
+  };
+
   return (
     <div className="bg-white text-gray-200 p-6">
-      <Loader isLoading={isLoading} />
+      {/* <Loader isLoading={isLoading || false} /> */}
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
-        onSubmit={async(values) => {
-          console.log(values);
-          setIsLoading(true); // Start loading
-          try {
-            // Simulate API call
-            console.log(values);
-            await new Promise((resolve) => setTimeout(resolve, 2000)); // Mock API call
-          } catch (error) {
-            console.error("Submission error:", error);
-          } finally {
-            setIsLoading(false); // Stop loading
-          }
-        }}
-      >
+        onSubmit={async (values) => {
+          OnSubmit(values);
+        }}>
         {({ setFieldValue, isValid, dirty, values }) => (
           <Form>
             <h1 className="text-3xl font-semibold mb-6">
@@ -140,7 +168,7 @@ export default function CreateEvent() {
               />
             </div>
 
-           {/* <div className="mb-6">
+            {/* <div className="mb-6">
               <label className="block text-lg font-medium mb-2">
                 Event Description
               </label>
@@ -157,7 +185,9 @@ export default function CreateEvent() {
         </div>*/}
 
             <div className="mb-6">
-              <label className="block text-lg font-medium mb-2">Ticket Price (GHO)</label>
+              <label className="block text-lg font-medium mb-2">
+                Ticket Price (GHO)
+              </label>
               <Field
                 type="number"
                 name="price"
@@ -177,8 +207,7 @@ export default function CreateEvent() {
                   isValid && dirty
                     ? "bg-blue-500 hover:bg-blue-700"
                     : "bg-gray-500 cursor-not-allowed"
-                }`}
-              >
+                }`}>
                 Create
               </button>
             </div>
