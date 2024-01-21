@@ -119,7 +119,7 @@ function Events() {
       }
     }
   }
-if(tickets.length!=data[0].result)
+if( data?.length > 0 && data[0].result && data[0].status == "success" && tickets.length!=data[0].result)
 {
 return  null
 }
