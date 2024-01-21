@@ -15,7 +15,7 @@ const contractEventTicketFactory = {
   abi: abiJSONContractEventTicketFactory as any,
 };
 
-console.log("contractEventTicketFactory", contractEventTicketFactory);
+
 
 const MyTicketsPage = () => {
   const { data, isError, isLoading, error } = useContractReads({
@@ -33,7 +33,7 @@ const MyTicketsPage = () => {
     ],
   });
 
-  console.log("data", data);
+
 
   return (
     <>

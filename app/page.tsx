@@ -50,6 +50,12 @@ const ReadSubContract=({address}:{address:`0x${string}`})=>{
         functionName: "paymentTokenAddress",
         args: [],
       },
+      {
+        address: address,
+        abi: abiJSONContractEventTicket as any,
+        functionName: "_nextTokenId",
+        args: [],
+      },
     ],
   });
   if(data?.length > 0 && data[0].status=="success"){
@@ -61,6 +67,7 @@ const ReadSubContract=({address}:{address:`0x${string}`})=>{
       ticketPrice:data[3].result,
       totalTickets:data[4].result,
       paymentTokenAddress:data[5].result,
+      ticketSold:data[6].result,
     }
     return event;
   }
@@ -110,7 +117,7 @@ let tickets=[]
 
   }
   
- console.log(tickets)
+
   return (
     <div className='flex'>
         {tickets.map((ticket,i)=>{
