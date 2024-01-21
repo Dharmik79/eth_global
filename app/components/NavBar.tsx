@@ -20,42 +20,15 @@ const navSecureItems = [
   },
 ];
 
-const spinnerStyle = {
-  border: "4px solid rgba(255, 255, 255, 0.3)",
-  borderRadius: "50%",
-  borderTop: "4px solid #000",
-  width: "40px",
-  height: "40px",
-  animation: "spin 2s linear infinite",
-};
 
-const spinnerContainerStyle = {
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  height: "100vh", // Adjust as needed
-};
 
-// Keyframes for the spinner animation
-const keyframes = `@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }`;
-
-// Add keyframes to the document
-const styleSheet = document.createElement("style");
-styleSheet.type = "text/css";
-styleSheet.innerText = keyframes;
-document.head.appendChild(styleSheet);
 
 export default function NavBar() {
   let pathname = usePathname() || "/";
   const dispatch = useDispatch();
   const { address, isConnecting, isConnected } = useAccount();
 
-  const reduxAddress = useSelector(
-    (state: RootState) => state.connection.address
-  ); // Update the selector to access the 'wallet' property
+  
   const reduxIsConnected = useSelector(
     (state: RootState) => state.connection.isConnected
   );

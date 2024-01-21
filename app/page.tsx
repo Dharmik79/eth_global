@@ -4,6 +4,7 @@ import Card from "./components/Card";
 import { useContractRead, useContractReads } from "wagmi";
 import abiJSONContractEventTicket from "../public/abi/contractEventTicket.json";
 import abiJSONContractEventTicketFactory from "../public/abi/contractEventTicketFactory.json";
+import Loader from "./components/Loader";
 
 const contractEventTicketFactory = {
   address: process.env
@@ -101,7 +102,7 @@ const ReadParentContract = ({ number }: { number: number }) => {
 function Events() {
   let tickets = [];
 
-  const { data, isError, isLoading, error } = useContractReads({
+  const { data} = useContractReads({
     contracts: [
       {
         ...contractEventTicketFactory,
@@ -118,7 +119,10 @@ function Events() {
       }
     }
   }
-
+if(tickets.length!=data[0].result)
+{
+return  null
+}
   return (
     <div className="flex flex-wrap justify-center gap-5">
       {tickets.map((ticket, i) => {
