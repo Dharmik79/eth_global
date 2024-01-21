@@ -147,8 +147,9 @@ export default function CreateEvent() {
                     className="bg-gray-700 border border-gray-600 text-white rounded-md py-2 px-4 block w-full"
                     selected={values.eventTime}
                     onChange={(date: Date) => setFieldValue("eventTime", date)}
-                    dateFormat="Pp"
+                    dateFormat="MMMM d, yyyy h:mm aa"
                     minDate={new Date()}
+                    showTimeSelect
                   />
                   <ErrorMessage
                     name="eventTime"
