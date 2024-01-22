@@ -149,7 +149,7 @@ function NewFn({ _data }: { _data: any }) {
           isLoading ? "bg-blue-600" : "bg-blue-600 hover:bg-blue-700"
         } focus:outline-none`}
         onClick={() => {
-            write && write();
+            write();
         }}>
         {isLoading ? "Loading" : "Approve"}
       </button>
@@ -194,7 +194,7 @@ function MintTicket({ _data }: { _data: any }) {
           isLoadingBuy ? "bg-blue-600" : "bg-blue-600 hover:bg-blue-700"
         } focus:outline-none`}
         onClick={() => {
-          writeBuy &&  writeBuy();
+            writeBuy();
         }}>
         {isLoadingBuy ? "Loading" : "Mint Ticket"}
       </button>
