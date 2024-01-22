@@ -95,7 +95,7 @@ const ReadParentContract =  ({ number }: { number: number }) => {
 
     if (data && data[0].status=="success" && !isLoading && !isError) {
       const contractEventTicket = {
-        address: data[0]?.result as `0x${string}`,
+        address: data[0].result as `0x${string}`,
         abi: abiJSONContractEventTicket as any,
       };
       const eventData= ReadSubContract({ address: contractEventTicket.address });
@@ -104,8 +104,6 @@ const ReadParentContract =  ({ number }: { number: number }) => {
       }
       
     }
-
-    console.log(events);
 
   return { events  };
 };
@@ -125,7 +123,7 @@ function Events() {
   
 
 if(data && data[0].status=="success" && !isLoading && !isError)
-  {for (let i = data[0].result; i >= 0 ; i--) {
+  {for (let i = data[0].result; i > 0 ; i--) {
 
     let DATA=ReadParentContract({ number: i})
 

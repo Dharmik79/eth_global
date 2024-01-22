@@ -22,8 +22,8 @@ const ReadSubContract = ({
   address: `0x${string}`;
   userAddress: `0x${string}`;
 }) => {
-  try
-{  const { data } = useContractReads({
+  let eventData;
+  const { data, isError, isLoading, error } = useContractReads({
     contracts: [
       {
         address: address,
@@ -55,24 +55,19 @@ const ReadSubContract = ({
         functionName: "ticketPrice",
         args: [],
       },
-      
     ],
   });
 
-  if (data?.length > 0 && data[0].status == "success" && data[0].result > 0) {
+  if (data && data[0].status == "success" && !isLoading && !isError) {
     const event = {
       eventTime: data[1].result,
       eventTitle: data[2].result,
       eventURL: data[3].result,
       ticketPrice: data[4].result,
-   
     };
-    return event;
-  }}
-  catch(e)
-  {
-    console.log(e);
+    eventData = event;
   }
+  return { eventData, isLoading, isError };
 };
 
 const ReadParentContract = ({
@@ -82,9 +77,7 @@ const ReadParentContract = ({
   number: number;
   address: `0x${string}`;
 }) => {
-  try{
-
-  
+  let events;
   const { data, isError, isLoading, error } = useContractReads({
     contracts: [
       {
@@ -95,20 +88,20 @@ const ReadParentContract = ({
     ],
   });
 
-  if (data?.length > 0 && data[0].status == "success") {
+  if (data && data[0].status == "success" && !isLoading && !isError) {
     const contractEventTicket = {
-      address: data[0]?.result as `0x${string}`,
+      address: data[0].result as `0x${string}`,
       abi: abiJSONContractEventTicket as any,
     };
-    return ReadSubContract({
+    const eventData = ReadSubContract({
       address: contractEventTicket.address,
       userAddress: address,
     });
+    if (eventData.eventData) {
+      events = eventData.eventData;
+    }
   }
-} catch(e)
-{
-  console.log(e);
-}
+  return { events };
 };
 const MyTicketsPage = () => {
   let tickets = [];
@@ -127,17 +120,14 @@ const MyTicketsPage = () => {
     ],
   });
 
-  if (data?.length > 0 && data[0].result && data[0].status == "success") {
-    let j = 0;
-    for (let i = data[0].result; i >= 0 && j < 5; i--) {
-      let result = ReadParentContract({ number: i, address: reduxAddress });
-      j++;
-      if (result) {
-        tickets.push(result);
-      }
+  if (data && data[0].status == "success" && !isLoading && !isError) {
+    for (let i = data[0].result; i > 0; i--) {
+      let DATA = ReadParentContract({ number: i, address: reduxAddress });
+
+      tickets.push(DATA.events);
     }
   }
- 
+
   return (
     <>
       <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white tracking-tight mb-4">
@@ -147,7 +137,7 @@ const MyTicketsPage = () => {
       <div className="flex flex-wrap justify-center gap-5">
         {tickets.length > 0 ? (
           tickets.map((ticket, index) => {
-            return <Card data={ticket} key={index} type={false}/>;
+            return <Card data={ticket} key={index} type={false} />;
           })
         ) : (
           <div className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white tracking-tight mb-4">
