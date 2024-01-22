@@ -24,7 +24,7 @@ const Card = ({
   key: number;
   type: boolean;
 }) => {
-  if(!data) return null;
+
 
   console.log(data);
   const isReduxConnected = useSelector(
@@ -108,7 +108,7 @@ function NewFn({ _data }: { _data: any }) {
     _data?.contractAddress?.toString(),
     Number(_data?.ticketPrice || 0),
   ];
-  console.log(newArgs);
+
   // Prepare contract write with dynamic arguments
   const { config: configApprove } = usePrepareContractWrite({
     address: "0xc4bF5CbDaBE595361438F8c6a187bDc330539c60",
