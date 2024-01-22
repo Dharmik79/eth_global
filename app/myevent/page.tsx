@@ -1,6 +1,6 @@
 "use client";
 import { useContractRead, useContractReads } from "wagmi";
-
+import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../lib/store";
 import { ConnectKitButton } from "connectkit";
@@ -58,7 +58,13 @@ const ReadSubContract = ({
     ],
   });
 
-  if (data && data[0].status == "success" && !isLoading && !isError) {
+  if (
+    data &&
+    data[0].status == "success" &&
+    data[0].result > 0 &&
+    !isLoading &&
+    !isError
+  ) {
     const event = {
       eventTime: data[1].result,
       eventTitle: data[2].result,
@@ -67,6 +73,7 @@ const ReadSubContract = ({
     };
     eventData = event;
   }
+
   return { eventData, isLoading, isError };
 };
 
@@ -104,8 +111,9 @@ const ReadParentContract = ({
   return { events };
 };
 const MyTicketsPage = () => {
-  let tickets = [];
+  // let tickets = [];
 
+  let tickets: any[] = [];
   const reduxAddress = useSelector(
     (state: RootState) => state.connection.address
   );
@@ -119,15 +127,19 @@ const MyTicketsPage = () => {
       },
     ],
   });
-
   if (data && data[0].status == "success" && !isLoading && !isError) {
-    for (let i = data[0].result; i > 0; i--) {
+    let updatedTickets = [];
+    const result = data[0].result as unknown as number;
+    for (let i = result; i > 0; i--) {
       let DATA = ReadParentContract({ number: i, address: reduxAddress });
       if (DATA.events) {
-        tickets.push(DATA.events);
+        updatedTickets.push(DATA.events);
       }
     }
+    tickets = updatedTickets;
   }
+
+  useEffect(() => {}, [isError, isLoading, reduxAddress]);
 
   return (
     <>
@@ -138,11 +150,9 @@ const MyTicketsPage = () => {
       <div className="flex flex-wrap justify-center gap-5">
         {tickets.length > 0 ? (
           tickets.map((ticket, index) => {
-            if(ticket)
-            {
+            if (ticket) {
               return <Card data={ticket} key={index} type={false} />;
             }
-          
           })
         ) : (
           <div className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white tracking-tight mb-4">
