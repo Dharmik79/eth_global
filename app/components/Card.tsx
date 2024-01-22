@@ -42,9 +42,12 @@ const Card = ({
 
   const ticketsLeft = Number(data?.totalTickets) - Number(data?.ticketSold);
 
-  if(!data) return null
+if(!data)
+{
+  return null
+}
   return (
-    <div className="max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out">
+   <div className="max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out">
       <div className="p-5">
         <h3 className="mb-2 text-2xl font-bold text-gray-800">
           {data?.eventTitle}
@@ -96,7 +99,8 @@ const Card = ({
       )}
       {buy && <NewFn _data={data} />}
     </div>
-  );
+     
+  )
 };
 
 export default Card;
@@ -145,7 +149,7 @@ function NewFn({ _data }: { _data: any }) {
           isLoading ? "bg-blue-600" : "bg-blue-600 hover:bg-blue-700"
         } focus:outline-none`}
         onClick={() => {
-          write();
+            write && write();
         }}>
         {isLoading ? "Loading" : "Approve"}
       </button>
@@ -190,7 +194,7 @@ function MintTicket({ _data }: { _data: any }) {
           isLoadingBuy ? "bg-blue-600" : "bg-blue-600 hover:bg-blue-700"
         } focus:outline-none`}
         onClick={() => {
-          writeBuy();
+          writeBuy &&  writeBuy();
         }}>
         {isLoadingBuy ? "Loading" : "Mint Ticket"}
       </button>

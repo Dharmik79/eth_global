@@ -123,12 +123,12 @@ const MyTicketsPage = () => {
   if (data && data[0].status == "success" && !isLoading && !isError) {
     for (let i = data[0].result; i > 0; i--) {
       let DATA = ReadParentContract({ number: i, address: reduxAddress });
-
-      tickets.push(DATA.events);
+      if (DATA.events) {
+        tickets.push(DATA.events);
+      }
     }
   }
 
-  // tickets = tickets.filter((item) => item != undefined);
   return (
     <>
       <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white tracking-tight mb-4">
@@ -138,7 +138,11 @@ const MyTicketsPage = () => {
       <div className="flex flex-wrap justify-center gap-5">
         {tickets.length > 0 ? (
           tickets.map((ticket, index) => {
-            return <Card data={ticket} key={index} type={false} />;
+            if(ticket)
+            {
+              return <Card data={ticket} key={index} type={false} />;
+            }
+          
           })
         ) : (
           <div className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white tracking-tight mb-4">

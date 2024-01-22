@@ -121,18 +121,24 @@ function Events() {
   if (data && data[0].status == "success" && !isLoading && !isError) {
     for (let i = data[0].result; i > 0; i--) {
       let DATA = ReadParentContract({ number: i });
-
-      tickets.push(DATA.events);
+      if(DATA.events)
+      {
+        tickets.push(DATA.events);
+      }
     }
   }
 
 
-  // tickets = tickets.filter((item) => item != undefined);
+
 
   return (
     <div className="flex flex-wrap justify-center gap-5">
       {tickets.map((ticket, i) => {
-        return <Card data={ticket} key={i} type={true} />;
+        if(ticket)
+        {
+          return <Card data={ticket} key={i} type={true} />;
+        }
+        
       })}
     </div>
   );

@@ -6,7 +6,7 @@ import { Formik, Field, Form, FormikHelpers, FormikProps } from "formik";
 import {
   useSendTransaction,
   useWaitForTransaction,
-  type BaseError,
+  // type BaseError,
 } from "wagmi";
 import { parseEther } from "viem";
 interface IWalletAddress {
@@ -43,7 +43,7 @@ export default function Transfer({ address }: Props) {
   }, [hash]);
   return (
     <div className="container">
-      <Formik
+    {/*  <Formik
         innerRef={formikRef}
         initialValues={{
           address: "",
@@ -90,7 +90,7 @@ export default function Transfer({ address }: Props) {
       {isConfirming && <div>Waiting for confirmation...</div>}
       {isConfirmed && <div>Transaction confirmed.</div>}
       {error && <div>{(error as BaseError).shortMessage || error.message}</div>}
-      <div>Connected Wallet: {address}</div>
+        <div>Connected Wallet: {address}</div>*/}
     </div>
   );
 }
