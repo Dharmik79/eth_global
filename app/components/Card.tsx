@@ -24,6 +24,9 @@ const Card = ({
   key: number;
   type: boolean;
 }) => {
+  if(!data) return null;
+
+  console.log(data);
   const isReduxConnected = useSelector(
     (state: RootState) => state.connection.isConnected
   );

@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Card from "./components/Card";
 import { useContractRead, useContractReads } from "wagmi";
 import abiJSONContractEventTicket from "../public/abi/contractEventTicket.json";
@@ -12,8 +12,10 @@ const contractEventTicketFactory = {
   abi: abiJSONContractEventTicketFactory as any,
 };
 
-const ReadSubContract = ({ address }: { address: `0x${string}` }) => {
-  try {
+const ReadSubContract =  ({ address }: { address: `0x${string}` }) => {
+
+    let eventData;
+
     const { data, isError, isLoading, error } = useContractReads({
       contracts: [
         {
@@ -60,7 +62,8 @@ const ReadSubContract = ({ address }: { address: `0x${string}` }) => {
         },
       ],
     });
-    if (data?.length > 0 && data[0].status == "success") {
+console.log(data);
+    if (data && data[0].status=="success" && !isLoading && !isError) {
       const event = {
         eventTime: data[0].result,
         eventTitle: data[1].result,
@@ -68,19 +71,19 @@ const ReadSubContract = ({ address }: { address: `0x${string}` }) => {
         ticketPrice: data[3].result,
         totalTickets: data[4].result,
         paymentTokenAddress: data[5].result,
-        ticketSold: data[6].result,
-        contractAddress: address,
+        nextTokenId: data[6].result,
+
+        // ... process other data
       };
-      return event;
+      eventData = event;
     }
-  } catch (e) {
-    console.log(e);
-  }
+    return { eventData, isLoading, isError };
 };
 
-const ReadParentContract = ({ number }: { number: number }) => {
-  try {
-    const { data } = useContractReads({
+const ReadParentContract =  ({ number }: { number: number }) => {
+ 
+ let events;
+    const { data, isError, isLoading,} = useContractReads({
       contracts: [
         {
           ...contractEventTicketFactory,
@@ -90,21 +93,27 @@ const ReadParentContract = ({ number }: { number: number }) => {
       ],
     });
 
-    if (data?.length > 0 && data[0].status == "success") {
+    if (data && data[0].status=="success" && !isLoading && !isError) {
       const contractEventTicket = {
         address: data[0]?.result as `0x${string}`,
         abi: abiJSONContractEventTicket as any,
       };
-      return ReadSubContract({ address: contractEventTicket.address });
+      const eventData= ReadSubContract({ address: contractEventTicket.address });
+      if(eventData.eventData){
+        events=eventData.eventData;
+      }
+      
     }
-  } catch (e) {
-    console.log(e);
-  }
+
+    console.log(events);
+
+  return { events  };
 };
 function Events() {
-  let tickets = [];
+  let tickets=[]
+  const [loading, setLoading] = useState(true);
 
-  const { data } = useContractReads({
+  const { data, isError, isLoading } = useContractReads({
     contracts: [
       {
         ...contractEventTicketFactory,
@@ -113,16 +122,19 @@ function Events() {
       },
     ],
   });
-  if (data?.length > 0 && data[0].result && data[0].status == "success") {
-    let j = 0;
-    for (let i = data[0].result; i >= 0 && j < 5; i--) {
-      let result = ReadParentContract({ number: i });
-      j++;
-      if (result) {
-        tickets.push(result);
-      }
-    }
+  
+
+if(data && data[0].status=="success" && !isLoading && !isError)
+  {for (let i = data[0].result; i >= 0 ; i--) {
+
+    let DATA=ReadParentContract({ number: i})
+
+
+   tickets.push(DATA.events);
+
   }
+}
+
 
   return (
     <div className="flex flex-wrap justify-center gap-5">
