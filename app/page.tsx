@@ -127,7 +127,7 @@ function Events() {
   }
 
 
-  tickets = tickets.filter((item) => item != undefined);
+  // tickets = tickets.filter((item) => item != undefined);
 
   return (
     <div className="flex flex-wrap justify-center gap-5">

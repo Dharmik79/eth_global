@@ -128,7 +128,7 @@ const MyTicketsPage = () => {
     }
   }
 
-  tickets = tickets.filter((item) => item != undefined);
+  // tickets = tickets.filter((item) => item != undefined);
   return (
     <>
       <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white tracking-tight mb-4">
