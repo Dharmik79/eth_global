@@ -40,12 +40,12 @@ const Card = ({
     }
   };
 
-  const ticketsLeft = Number(data?.totalTickets) - Number(data?.ticketSold);
+  const ticketsLeft = Number(data?.totalTickets ||0) - Number(data?.ticketSold ||0);
 
-if(!data)
-{
-  return null
-}
+// if(!data)
+// {
+//   return null
+// }
   return (
    <div className="max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out">
       <div className="p-5">
