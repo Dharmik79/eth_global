@@ -105,7 +105,7 @@ const ReadParentContract = ({ number }: { number: number }) => {
   return { events };
 };
 function Events() {
-  let tickets = [];
+  let tickets: any[] = [];
   const [loading, setLoading] = useState(true);
 
   const { data, isError, isLoading } = useContractReads({
@@ -119,15 +119,19 @@ function Events() {
   });
 
   if (data && data[0].status == "success" && !isLoading && !isError) {
-    for (let i = data[0].result; i > 0; i--) {
+    let updatedTickets = [];
+    const result = data[0].result as unknown as number;
+    for (let i = result; i > 0; i--) {
       let DATA = ReadParentContract({ number: i });
-      if(DATA.events)
-      {
-        tickets.push(DATA.events);
+      if (DATA.events) {
+        updatedTickets.push(DATA.events);
       }
     }
+    tickets = updatedTickets;
   }
 
+
+  useEffect(() => {}, [isError, isLoading]);
 
 
 
